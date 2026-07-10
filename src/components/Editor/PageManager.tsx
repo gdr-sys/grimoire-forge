@@ -2,6 +2,7 @@ import { Plus, Trash2, Copy } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import { usePages } from '../../hooks/usePages';
 import { useUiStore } from '../../stores/uiStore';
+import { PageSettings } from './PageSettings';
 
 export function PageManager() {
   const { t } = useTranslation();
@@ -10,7 +11,10 @@ export function PageManager() {
   const setActivePageIndex = useUiStore((s) => s.setActivePageIndex);
 
   return (
-    <div className="flex flex-col gap-1 p-3">
+    <div className="flex flex-col">
+      {pages.length > 0 && <PageSettings />}
+
+      <div className="flex flex-col gap-1 p-3">
       <div className="mb-2 flex items-center justify-between">
         <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
           {t('editor.pages')}
@@ -56,6 +60,7 @@ export function PageManager() {
           {t('page.add')}
         </button>
       )}
+      </div>
     </div>
   );
 }
