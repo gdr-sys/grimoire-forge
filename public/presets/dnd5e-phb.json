@@ -1,0 +1,19 @@
+{
+  "id": "dnd5e-phb",
+  "name": "D&D 5e PHB",
+  "description": "Stile del Player's Handbook",
+  "version": "1.0.0",
+  "gameSystem": "dnd5e",
+  "styles": {
+    "pageBackground": "#fdf1dc",
+    "pageFontFamily": "Bookman Old Style, Georgia, serif",
+    "pageFontSize": "9.5pt",
+    "pageLineHeight": "1.4",
+    "pageColor": "#231f20",
+    "headings": {
+      "h1": { "fontFamily": "Modesto Condensed, serif", "fontSize": "2.5em", "color": "#58170d", "borderBottom": "3px solid #c9ad6a" },
+      "h2": { "fontFamily": "Modesto Condensed, serif", "fontSize": "2em", "color": "#58170d", "borderBottom": "2px solid #c9ad6a" },
+      "h3": { "fontFamily": "Bookman Old Style, serif", "fontSize": "1.3em", "color": "#58170d", "borderBottom": "none" }
+    }
+  }
+}

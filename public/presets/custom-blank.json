@@ -1,0 +1,19 @@
+{
+  "id": "custom-blank",
+  "name": "Foglio Bianco",
+  "description": "Senza stile predefinito",
+  "version": "1.0.0",
+  "gameSystem": null,
+  "styles": {
+    "pageBackground": "#ffffff",
+    "pageFontFamily": "Noto Sans, sans-serif",
+    "pageFontSize": "10pt",
+    "pageLineHeight": "1.5",
+    "pageColor": "#1a202c",
+    "headings": {
+      "h1": { "fontFamily": "inherit", "fontSize": "2em", "color": "#1a202c", "borderBottom": "none" },
+      "h2": { "fontFamily": "inherit", "fontSize": "1.5em", "color": "#1a202c", "borderBottom": "none" },
+      "h3": { "fontFamily": "inherit", "fontSize": "1.25em", "color": "#1a202c", "borderBottom": "none" }
+    }
+  }
+}

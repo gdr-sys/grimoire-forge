@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Book base -->
+  <rect x="8" y="10" width="48" height="44" rx="4" fill="#1a1a2e"/>
+  <rect x="8" y="10" width="24" height="44" rx="4" fill="#16213e"/>
+  <!-- Spine -->
+  <rect x="30" y="10" width="4" height="44" fill="#7c3aed"/>
+  <!-- Pages -->
+  <rect x="12" y="16" width="16" height="32" rx="1" fill="#2d2b55" opacity="0.8"/>
+  <rect x="36" y="16" width="16" height="32" rx="1" fill="#2d2b55" opacity="0.8"/>
+  <!-- Flame / rune -->
+  <path d="M32 8 C32 8 28 14 28 19 C28 22.3 30 24 32 24 C34 24 36 22.3 36 19 C36 14 32 8 32 8Z" fill="#c9ad6a"/>
+  <path d="M32 12 C32 12 30 16 30 19 C30 20.7 31 22 32 22 C33 22 34 20.7 34 19 C34 16 32 12 32 12Z" fill="#7c3aed"/>
+  <!-- Gold ornaments on pages -->
+  <line x1="14" y1="22" x2="26" y2="22" stroke="#c9ad6a" stroke-width="1" opacity="0.6"/>
+  <line x1="14" y1="26" x2="26" y2="26" stroke="#c9ad6a" stroke-width="0.5" opacity="0.4"/>
+  <line x1="14" y1="30" x2="26" y2="30" stroke="#c9ad6a" stroke-width="0.5" opacity="0.4"/>
+  <line x1="38" y1="22" x2="50" y2="22" stroke="#c9ad6a" stroke-width="1" opacity="0.6"/>
+  <line x1="38" y1="26" x2="50" y2="26" stroke="#c9ad6a" stroke-width="0.5" opacity="0.4"/>
+  <line x1="38" y1="30" x2="50" y2="30" stroke="#c9ad6a" stroke-width="0.5" opacity="0.4"/>
+</svg>

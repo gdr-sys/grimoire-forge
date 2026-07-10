@@ -1,0 +1,19 @@
+{
+  "id": "parchment-classic",
+  "name": "Pergamena Classica",
+  "description": "Sfondo pergamena con font serif",
+  "version": "1.0.0",
+  "gameSystem": null,
+  "styles": {
+    "pageBackground": "#f4e8c1",
+    "pageFontFamily": "Crimson Text, Georgia, serif",
+    "pageFontSize": "10pt",
+    "pageLineHeight": "1.6",
+    "pageColor": "#3b2a1a",
+    "headings": {
+      "h1": { "fontFamily": "Cinzel, serif", "fontSize": "2em", "color": "#5b3a1a", "borderBottom": "2px solid #9b7a4a" },
+      "h2": { "fontFamily": "Cinzel, serif", "fontSize": "1.5em", "color": "#5b3a1a", "borderBottom": "1px solid #c9ad6a" },
+      "h3": { "fontFamily": "Cinzel, serif", "fontSize": "1.25em", "color": "#5b3a1a", "borderBottom": "none" }
+    }
+  }
+}
