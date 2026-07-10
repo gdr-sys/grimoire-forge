@@ -10,7 +10,7 @@ interface Props {
 const LEVELS: HeadingLevel[] = ['h1', 'h2', 'h3', 'h4'];
 
 export function HeadingBlock({ data, isSelected, onChange }: Props) {
-  const Tag = data.level as keyof JSX.IntrinsicElements;
+  const Tag = data.level;
   const ref = useRef<HTMLElement>(null);
 
   function handleBlur() {

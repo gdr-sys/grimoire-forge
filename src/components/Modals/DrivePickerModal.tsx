@@ -4,6 +4,7 @@ import { useTranslation } from '../../hooks/useTranslation';
 import { useGoogleDrive } from '../../hooks/useGoogleDrive';
 import { useDocumentStore } from '../../stores/documentStore';
 import { db } from '../../lib/db';
+import type { GrimoireDocument } from '../../types/document';
 import { useState } from 'react';
 
 export function DrivePickerModal() {
@@ -31,9 +32,20 @@ export function DrivePickerModal() {
   async function handleOpen(fileId: string) {
     setIsLoading(true);
     try {
-      const doc = await loadFromDrive(fileId);
-      if (doc) {
-        await db.documents.put({ ...doc, syncStatus: 'synced', driveFileId: fileId });
+      const json = await loadFromDrive(fileId);
+      if (json) {
+        const doc: GrimoireDocument = JSON.parse(json);
+        await db.documents.put({
+          id: doc.id,
+          title: doc.title,
+          data: json,
+          presetId: doc.presetId,
+          updatedAt: doc.updatedAt,
+          createdAt: doc.createdAt,
+          driveFileId: fileId,
+          syncStatus: 'synced',
+          thumbnail: doc.thumbnail,
+        });
         loadDocument(doc);
         closeModal();
       }

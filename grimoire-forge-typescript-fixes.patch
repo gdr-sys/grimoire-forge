@@ -1,0 +1,203 @@
+diff --git a/src/components/Blocks/HeadingBlock.tsx b/src/components/Blocks/HeadingBlock.tsx
+index 51e18a1..dde68cd 100644
+--- a/src/components/Blocks/HeadingBlock.tsx
++++ b/src/components/Blocks/HeadingBlock.tsx
+@@ -10,7 +10,7 @@ interface Props {
+ const LEVELS: HeadingLevel[] = ['h1', 'h2', 'h3', 'h4'];
+ 
+ export function HeadingBlock({ data, isSelected, onChange }: Props) {
+-  const Tag = data.level as keyof JSX.IntrinsicElements;
++  const Tag = data.level;
+   const ref = useRef<HTMLElement>(null);
+ 
+   function handleBlur() {
+diff --git a/src/components/Layout/PropertiesPanel.tsx b/src/components/Layout/PropertiesPanel.tsx
+index a63680e..fb14432 100644
+--- a/src/components/Layout/PropertiesPanel.tsx
++++ b/src/components/Layout/PropertiesPanel.tsx
+@@ -35,7 +35,7 @@ export function PropertiesPanel() {
+ 
+       <div className="flex-1 overflow-y-auto scrollbar-thin p-3">
+         {selectedBlock ? (
+-          <StyleEditor block={selectedBlock} />
++          <StyleEditor />
+         ) : (
+           <div className="flex h-32 items-center justify-center text-center text-sm text-slate-400 dark:text-slate-500">
+             Seleziona un blocco per modificarne le proprietà
+diff --git a/src/components/Modals/DrivePickerModal.tsx b/src/components/Modals/DrivePickerModal.tsx
+index 57c5c3a..34a1371 100644
+--- a/src/components/Modals/DrivePickerModal.tsx
++++ b/src/components/Modals/DrivePickerModal.tsx
+@@ -4,6 +4,7 @@ import { useTranslation } from '../../hooks/useTranslation';
+ import { useGoogleDrive } from '../../hooks/useGoogleDrive';
+ import { useDocumentStore } from '../../stores/documentStore';
+ import { db } from '../../lib/db';
++import type { GrimoireDocument } from '../../types/document';
+ import { useState } from 'react';
+ 
+ export function DrivePickerModal() {
+@@ -31,9 +32,20 @@ export function DrivePickerModal() {
+   async function handleOpen(fileId: string) {
+     setIsLoading(true);
+     try {
+-      const doc = await loadFromDrive(fileId);
+-      if (doc) {
+-        await db.documents.put({ ...doc, syncStatus: 'synced', driveFileId: fileId });
++      const json = await loadFromDrive(fileId);
++      if (json) {
++        const doc: GrimoireDocument = JSON.parse(json);
++        await db.documents.put({
++          id: doc.id,
++          title: doc.title,
++          data: json,
++          presetId: doc.presetId,
++          updatedAt: doc.updatedAt,
++          createdAt: doc.createdAt,
++          driveFileId: fileId,
++          syncStatus: 'synced',
++          thumbnail: doc.thumbnail,
++        });
+         loadDocument(doc);
+         closeModal();
+       }
+diff --git a/src/components/Modals/ImportModal.tsx b/src/components/Modals/ImportModal.tsx
+index 9b776da..bc52128 100644
+--- a/src/components/Modals/ImportModal.tsx
++++ b/src/components/Modals/ImportModal.tsx
+@@ -26,7 +26,17 @@ export function ImportModal() {
+     setIsLoading(true);
+     try {
+       const doc = await importFromJsonFile(file);
+-      await db.documents.put({ ...doc, syncStatus: 'local-only', driveFileId: null });
++      await db.documents.put({
++        id: doc.id,
++        title: doc.title,
++        data: JSON.stringify(doc),
++        presetId: doc.presetId,
++        updatedAt: doc.updatedAt,
++        createdAt: doc.createdAt,
++        driveFileId: null,
++        syncStatus: 'local-only',
++        thumbnail: doc.thumbnail,
++      });
+       loadDocument(doc);
+       closeModal();
+     } catch (err) {
+@@ -42,7 +52,17 @@ export function ImportModal() {
+     setIsLoading(true);
+     try {
+       const doc = importFromHomebrewery(mdText);
+-      await db.documents.put({ ...doc, syncStatus: 'local-only', driveFileId: null });
++      await db.documents.put({
++        id: doc.id,
++        title: doc.title,
++        data: JSON.stringify(doc),
++        presetId: doc.presetId,
++        updatedAt: doc.updatedAt,
++        createdAt: doc.createdAt,
++        driveFileId: null,
++        syncStatus: 'local-only',
++        thumbnail: doc.thumbnail,
++      });
+       loadDocument(doc);
+       closeModal();
+     } catch (err) {
+diff --git a/src/components/Modals/WelcomeModal.tsx b/src/components/Modals/WelcomeModal.tsx
+index 375aa6c..ff5d2ea 100644
+--- a/src/components/Modals/WelcomeModal.tsx
++++ b/src/components/Modals/WelcomeModal.tsx
+@@ -14,7 +14,17 @@ export function WelcomeModal() {
+ 
+   async function handleNewDocument() {
+     const doc = createEmptyDocument('custom-blank');
+-    await db.documents.put({ ...doc, syncStatus: 'local-only', driveFileId: null });
++    await db.documents.put({
++      id: doc.id,
++      title: doc.title,
++      data: JSON.stringify(doc),
++      presetId: doc.presetId,
++      updatedAt: doc.updatedAt,
++      createdAt: doc.createdAt,
++      driveFileId: null,
++      syncStatus: 'local-only',
++      thumbnail: doc.thumbnail,
++    });
+     loadDocument(doc);
+     closeModal();
+     navigate(`/editor/${doc.id}`);
+diff --git a/src/components/Panels/StyleEditor.tsx b/src/components/Panels/StyleEditor.tsx
+index 240a94e..ac01b9e 100644
+--- a/src/components/Panels/StyleEditor.tsx
++++ b/src/components/Panels/StyleEditor.tsx
+@@ -124,7 +124,7 @@ export function StyleEditor() {
+               <input
+                 type="text"
+                 value={style.border.radius}
+-                onChange={(e) => patch({ border: { ...style.border, radius: e.target.value } })}
++                onChange={(e) => patch({ border: { ...style.border, radius: Number(e.target.value) || 0 } })}
+                 className="input-xs"
+                 placeholder="4px"
+               />
+@@ -136,7 +136,7 @@ export function StyleEditor() {
+       {/* Background */}
+       <Section title={t('style.background')}>
+         <div className="flex gap-1">
+-          {(['transparent', 'solid'] as const).map((bt) => (
++          {(['transparent', 'color'] as const).map((bt) => (
+             <button
+               key={bt}
+               onClick={() => patch({ backgroundType: bt })}
+@@ -146,7 +146,7 @@ export function StyleEditor() {
+             </button>
+           ))}
+         </div>
+-        {style.backgroundType === 'solid' && (
++        {style.backgroundType === 'color' && (
+           <LabelRow label="Colore">
+             <input
+               type="color"
+@@ -189,10 +189,10 @@ function SpacingRow({
+   onBottom,
+ }: {
+   label: string;
+-  top: string;
+-  bottom: string;
+-  onTop: (v: string) => void;
+-  onBottom: (v: string) => void;
++  top: number;
++  bottom: number;
++  onTop: (v: number) => void;
++  onBottom: (v: number) => void;
+ }) {
+   return (
+     <div className="flex items-center gap-2">
+@@ -200,7 +200,7 @@ function SpacingRow({
+       <input
+         type="text"
+         value={top}
+-        onChange={(e) => onTop(e.target.value)}
++        onChange={(e) => onTop(Number(e.target.value) || 0)}
+         className="input-xs w-16"
+         placeholder="Alto"
+         title="Alto"
+@@ -208,7 +208,7 @@ function SpacingRow({
+       <input
+         type="text"
+         value={bottom}
+-        onChange={(e) => onBottom(e.target.value)}
++        onChange={(e) => onBottom(Number(e.target.value) || 0)}
+         className="input-xs w-16"
+         placeholder="Basso"
+         title="Basso"
+diff --git a/src/stores/uiStore.ts b/src/stores/uiStore.ts
+index a00537c..c1c5a4c 100644
+--- a/src/stores/uiStore.ts
++++ b/src/stores/uiStore.ts
+@@ -20,6 +20,7 @@ interface ConfirmOptions {
+   message: string;
+   confirmLabel?: string;
+   cancelLabel?: string;
++  danger?: boolean;
+   onConfirm: () => void;
+ }
+ 

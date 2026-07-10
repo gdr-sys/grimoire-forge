@@ -35,7 +35,7 @@ export function PropertiesPanel() {
 
       <div className="flex-1 overflow-y-auto scrollbar-thin p-3">
         {selectedBlock ? (
-          <StyleEditor block={selectedBlock} />
+          <StyleEditor />
         ) : (
           <div className="flex h-32 items-center justify-center text-center text-sm text-slate-400 dark:text-slate-500">
             Seleziona un blocco per modificarne le proprietà

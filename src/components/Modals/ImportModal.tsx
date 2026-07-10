@@ -26,7 +26,17 @@ export function ImportModal() {
     setIsLoading(true);
     try {
       const doc = await importFromJsonFile(file);
-      await db.documents.put({ ...doc, syncStatus: 'local-only', driveFileId: null });
+      await db.documents.put({
+        id: doc.id,
+        title: doc.title,
+        data: JSON.stringify(doc),
+        presetId: doc.presetId,
+        updatedAt: doc.updatedAt,
+        createdAt: doc.createdAt,
+        driveFileId: null,
+        syncStatus: 'local-only',
+        thumbnail: doc.thumbnail,
+      });
       loadDocument(doc);
       closeModal();
     } catch (err) {
@@ -42,7 +52,17 @@ export function ImportModal() {
     setIsLoading(true);
     try {
       const doc = importFromHomebrewery(mdText);
-      await db.documents.put({ ...doc, syncStatus: 'local-only', driveFileId: null });
+      await db.documents.put({
+        id: doc.id,
+        title: doc.title,
+        data: JSON.stringify(doc),
+        presetId: doc.presetId,
+        updatedAt: doc.updatedAt,
+        createdAt: doc.createdAt,
+        driveFileId: null,
+        syncStatus: 'local-only',
+        thumbnail: doc.thumbnail,
+      });
       loadDocument(doc);
       closeModal();
     } catch (err) {

@@ -124,7 +124,7 @@ export function StyleEditor() {
               <input
                 type="text"
                 value={style.border.radius}
-                onChange={(e) => patch({ border: { ...style.border, radius: e.target.value } })}
+                onChange={(e) => patch({ border: { ...style.border, radius: Number(e.target.value) || 0 } })}
                 className="input-xs"
                 placeholder="4px"
               />
@@ -136,7 +136,7 @@ export function StyleEditor() {
       {/* Background */}
       <Section title={t('style.background')}>
         <div className="flex gap-1">
-          {(['transparent', 'solid'] as const).map((bt) => (
+          {(['transparent', 'color'] as const).map((bt) => (
             <button
               key={bt}
               onClick={() => patch({ backgroundType: bt })}
@@ -146,7 +146,7 @@ export function StyleEditor() {
             </button>
           ))}
         </div>
-        {style.backgroundType === 'solid' && (
+        {style.backgroundType === 'color' && (
           <LabelRow label="Colore">
             <input
               type="color"
@@ -189,10 +189,10 @@ function SpacingRow({
   onBottom,
 }: {
   label: string;
-  top: string;
-  bottom: string;
-  onTop: (v: string) => void;
-  onBottom: (v: string) => void;
+  top: number;
+  bottom: number;
+  onTop: (v: number) => void;
+  onBottom: (v: number) => void;
 }) {
   return (
     <div className="flex items-center gap-2">
@@ -200,7 +200,7 @@ function SpacingRow({
       <input
         type="text"
         value={top}
-        onChange={(e) => onTop(e.target.value)}
+        onChange={(e) => onTop(Number(e.target.value) || 0)}
         className="input-xs w-16"
         placeholder="Alto"
         title="Alto"
@@ -208,7 +208,7 @@ function SpacingRow({
       <input
         type="text"
         value={bottom}
-        onChange={(e) => onBottom(e.target.value)}
+        onChange={(e) => onBottom(Number(e.target.value) || 0)}
         className="input-xs w-16"
         placeholder="Basso"
         title="Basso"
